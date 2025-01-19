@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<XMLDB PATH="local/forumpostratelimit/db" VERSION="20250118" COMMENT="XMLDB file for Moodle local/forumpostratelimit"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="../../../lib/xmldb/xmldb.xsd"
+>
+    <TABLES>
+        <TABLE NAME="local_forumpostratelimit_configs" COMMENT="Configurations for local_forumpostratelimit plugin">
+            <FIELDS>
+                <FIELD NAME="id" SEQUENCE="true" TYPE="int" NOTNULL="true" LENGTH="11" />
+                <FIELD NAME="context" SEQUENCE="false" TYPE="int" NOTNULL="true" LENGTH="11" />
+                <FIELD NAME="postratelimit" SEQUENCE="false" TYPE="int" NOTNULL="false" LENGTH="11" />
+                <FIELD NAME="timespan" SEQUENCE="false" TYPE="float" NOTNULL="false" />
+                <FIELD NAME="timespanunit" SEQUENCE="false" TYPE="int" NOTNULL="false" LENGTH="2" />
+            </FIELDS>
+            <KEYS>
+                <KEY NAME="pk" TYPE="primary" FIELDS="id" />
+            </KEYS>
+            <INDEXES>
+                <INDEX NAME="context_idx" UNIQUE="true" FIELDS="context" />
+            </INDEXES>
+        </TABLE>
+    </TABLES>
+</XMLDB>
