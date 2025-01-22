@@ -5,6 +5,7 @@ namespace local_forumpostratelimit;
 require_once(__DIR__ . '/../lib.php');
 
 class checker {
+    private $contextid = null;
     private $postratelimit = null;
     private $timespan = null;
     private $timespanunit = null;
@@ -30,10 +31,35 @@ class checker {
         if (is_null($this->timespan) || $this->timespan <= 0) {
             return false;
         }
-
         $userid = is_null($userid) ? $USER->id : $userid;
-        $count = $DB->count_records_sql('SELECT COUNT(*) FROM {forum_posts} WHERE userid = ? AND created >= ?', [$userid, $this->getmintimestamp()]);
+
+        $count = 0;
+        if ($this->contextid) {
+            $context = \core\context::instance_by_id($this->contextid);
+            if ($context instanceof \core\context\module) {
+                $coursemodule = get_coursemodule_from_id('forum', $context->instanceid);
+                $forumid = $coursemodule->instance;
+                $count = $DB->count_records_sql('SELECT COUNT(*) FROM {forum_posts} p JOIN {forum_discussions} d ON d.id = p.discussion WHERE d.forum = ? AND p.userid = ? AND p.created >= ?', [$forumid, $userid, $this->getmintimestamp()]);
+            } else if ($context instanceof \core\context\course) {
+                $courseid = $context->instanceid;
+                $count = $DB->count_records_sql('SELECT COUNT(*) FROM {forum_posts} p JOIN {forum_discussions} d ON d.id = p.discussion WHERE d.course = ? AND p.userid = ? AND p.created >= ?', [$courseid, $userid, $this->getmintimestamp()]);
+            }
+        } else {
+            $count = $DB->count_records_sql('SELECT COUNT(*) FROM {forum_posts} WHERE userid = ? AND created >= ?', [$userid, $this->getmintimestamp()]);
+        }
         return $count >= $this->postratelimit;
+    }
+
+    public function getlimitexceededstring() {
+        if (!$this->timespan || !$this->timespanunit) {
+            return '';
+        }
+        $a = [
+            'limit' => is_null($this->postratelimit) ? 0 : $this->postratelimit,
+            'timespan' => $this->timespan,
+            'timespanunit' => get_string('timespanunit_' . $this->timespanunit, 'local_forumpostratelimit'),
+        ];
+        return get_string('limitexceeded', 'local_forumpostratelimit', $a);
     }
 
     private function getmintimestamp() {
@@ -53,6 +79,7 @@ class checker {
     }
 
     private function assignrecord(\stdClass $record) {
+        $this->contextid = $record->context;
         $this->postratelimit = $record->postratelimit;
         $this->timespan = $record->timespan;
         $this->timespanunit = $record->timespanunit;
@@ -67,9 +94,19 @@ class checker {
 
     private static function getsiteconfig() {
         $record = new \stdClass();
+        $record->context = null;
         $record->postratelimit = get_config('local_forumpostratelimit', 'limit');
         $record->timespan = get_config('local_forumpostratelimit', 'timespan');
         $record->timespanunit = get_config('local_forumpostratelimit', 'timespanunit');
         return $record;
+    }
+
+    public static function fromforumid($forumid) {
+        $coursemodule = get_coursemodule_from_instance('forum', $forumid, 0, false, MUST_EXIST);
+        return new self($coursemodule->id);
+    }
+
+    public static function fromcmid($cmid) {
+        return new self($cmid);
     }
 }

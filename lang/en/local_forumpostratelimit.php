@@ -27,6 +27,7 @@ defined('MOODLE_INTERNAL') || die();
 
 $string['days'] = 'Days';
 $string['hours'] = 'Hours';
+$string['limitexceeded'] = 'You have exceeded post limit of {$a->limit} post(s) within {$a->timespan} {$a->timespanunit}(s).';
 $string['minutes'] = 'Minutes';
 $string['pluginname'] = 'Forum Post Rate Limit';
 $string['postratelimit'] = 'Post Rate Limit';
@@ -35,4 +36,8 @@ $string['seconds'] = 'Seconds';
 $string['timespan'] = 'Time Span';
 $string['timespan_help'] = 'Duration of time to apply the post rate limit.';
 $string['timespanunit'] = 'Time Span Unit';
+$string['timespanunit_1'] = 'second';
+$string['timespanunit_2'] = 'minute';
+$string['timespanunit_3'] = 'hour';
+$string['timespanunit_4'] = 'day';
 $string['timespanunit_help'] = 'Unit of the time duration to apply the post rate limit.';
