@@ -7,12 +7,13 @@ class observers {
         global $DB;
         /** @var \moodle_database $DB */
         $DB;
-        $forumid = $event->other['forumid'];
+        $data = $event->get_data();
+        $forumid = $data['other']['forumid'];
         $checker = checker::fromforumid($forumid);
-        if ($checker->limitexceeded()) {
-            $discussion = $DB->get_record('forum_discussions', ['id' => $event->other['discussionid']], '*', MUST_EXIST);
+        if ($checker->limitexceeded(null, $data['objectid'])) {
+            $discussion = $DB->get_record('forum_discussions', ['id' => $data['other']['discussionid']], '*', MUST_EXIST);
             $forum = $DB->get_record('forum', ['id' => $discussion->forum], '*', MUST_EXIST);
-            $post = $DB->get_record('forum_posts', ['id' => $event->objectid], '*', MUST_EXIST);
+            $post = $DB->get_record('forum_posts', ['id' => $data['objectid']], '*', MUST_EXIST);
             forum_delete_post(
                 $post,
                 true,
@@ -27,10 +28,11 @@ class observers {
         global $DB;
         /** @var \moodle_database $DB */
         $DB;
-        $forumid = $event->other['forumid'];
+        $data = $event->get_data();
+        $forumid = $data['other']['forumid'];
         $checker = checker::fromforumid($forumid);
-        if ($checker->limitexceeded()) {
-            $discussion = $DB->get_record('forum_discussions', ['id' => $event->objectid], '*', MUST_EXIST);
+        $discussion = $DB->get_record('forum_discussions', ['id' => $data['objectid']], '*', MUST_EXIST);
+        if ($checker->limitexceeded(null, $discussion->firstpost)) {
             $forum = $DB->get_record('forum', ['id' => $discussion->forum], '*', MUST_EXIST);
             forum_delete_discussion(
                 $discussion,

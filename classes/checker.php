@@ -23,7 +23,7 @@ class checker {
         $this->assignrecord(self::getsiteconfig());
     }
 
-    public function limitexceeded($userid = null) {
+    public function limitexceeded($userid = null, $excludepostid = 0) {
         global $USER, $DB;
         /** @var \moodle_database $DB */
         $DB;
@@ -39,13 +39,19 @@ class checker {
             if ($context instanceof \core\context\module) {
                 $coursemodule = get_coursemodule_from_id('forum', $context->instanceid);
                 $forumid = $coursemodule->instance;
-                $count = $DB->count_records_sql('SELECT COUNT(*) FROM {forum_posts} p JOIN {forum_discussions} d ON d.id = p.discussion WHERE d.forum = ? AND p.userid = ? AND p.created >= ?', [$forumid, $userid, $this->getmintimestamp()]);
+                $count = $DB->count_records_sql(
+                    'SELECT COUNT(*) FROM {forum_posts} p JOIN {forum_discussions} d ON d.id = p.discussion WHERE d.forum = ? AND p.userid = ? AND p.created >= ? AND p.id != ?',
+                    [$forumid, $userid, $this->getmintimestamp(), $excludepostid]
+                );
             } else if ($context instanceof \core\context\course) {
                 $courseid = $context->instanceid;
-                $count = $DB->count_records_sql('SELECT COUNT(*) FROM {forum_posts} p JOIN {forum_discussions} d ON d.id = p.discussion WHERE d.course = ? AND p.userid = ? AND p.created >= ?', [$courseid, $userid, $this->getmintimestamp()]);
+                $count = $DB->count_records_sql(
+                    'SELECT COUNT(*) FROM {forum_posts} p JOIN {forum_discussions} d ON d.id = p.discussion WHERE d.course = ? AND p.userid = ? AND p.created >= ? AND p.id != ?',
+                    [$courseid, $userid, $this->getmintimestamp()]
+                );
             }
         } else {
-            $count = $DB->count_records_sql('SELECT COUNT(*) FROM {forum_posts} WHERE userid = ? AND created >= ?', [$userid, $this->getmintimestamp()]);
+            $count = $DB->count_records_sql('SELECT COUNT(*) FROM {forum_posts} WHERE userid = ? AND created >= ? AND id != ?', [$userid, $this->getmintimestamp(), $excludepostid]);
         }
         return $count >= $this->postratelimit;
     }
