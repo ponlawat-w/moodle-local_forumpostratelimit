@@ -18,7 +18,8 @@ class hookcallbacks {
             $context = \core\context\course::instance($course->id);
             $record = $DB->get_record('local_forumpostratelimit_configs', ['context' => $context->id]);
         }
-        local_forumpostratelimit_applytoform($payload->mform, $record ? $record : null);
+        $previousconfigstringkey = \local_forumpostratelimit\checker::hassiteconfig() ? 'configuredlevelsite' : null;
+        local_forumpostratelimit_applytoform($payload->mform, $record ? $record : null, $previousconfigstringkey);
     }
 
     public static function course_after_form_submission(\core_course\hook\after_form_submission $payload) {

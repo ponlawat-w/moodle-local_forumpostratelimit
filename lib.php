@@ -36,8 +36,19 @@ function local_forumpostratelimit_getunitoptions() {
     ];
 }
 
-function local_forumpostratelimit_applytoform(\MoodleQuickForm $mform, ?\stdClass $default = null) {
+function local_forumpostratelimit_applytoform(\MoodleQuickForm $mform, ?\stdClass $default = null, ?string $previousconfigstringkey = null) {
     $mform->addElement('header', 'local_forumpostratelimit', get_string('postratelimit', 'local_forumpostratelimit'));
+
+    if (!is_null($previousconfigstringkey)) {
+        $mform->addElement(
+            'html',
+            \core\output\html_writer::tag(
+                'div',
+                get_string($previousconfigstringkey, 'local_forumpostratelimit'),
+                ['class' => 'alert alert-warning']
+            )
+        );
+    }
 
     $mform->addElement('checkbox', 'local_forumpostratelimit_enabled', get_string('enabled', 'local_forumpostratelimit'));
     $mform->setDefault('local_forumpostratelimit_enabled', !is_null($default));
@@ -99,11 +110,19 @@ function local_forumpostratelimit_coursemodule_standard_elements(moodleform_mod 
     if (is_null($add) && !$coursemodule) {
         return;
     }
+    $previousconfigstringkey = null;
     if ($coursemodule) {
+        [$course] = get_course_and_cm_from_cmid($coursemodule);
         $context = core\context\module::instance($coursemodule->id);
-        $record = $DB->get_record('local_forumpostratelimit_configs', ['context' => $context->id]);
+        $record = $DB->get_record('local_forumpostratelimit_configs', ['context' => $context->instanceid]);
+        if ($DB->get_record('local_forumpostratelimit_configs', ['context' => core\context\course::instance($course->id)->id])) {
+            $previousconfigstringkey = 'configuredlevelcourse';
+        }
     }
-    local_forumpostratelimit_applytoform($mform, $record ? $record : null);
+    if (is_null($previousconfigstringkey) && local_forumpostratelimit\checker::hassiteconfig()) {
+        $previousconfigstringkey = 'configuredlevelsite';
+    }
+    local_forumpostratelimit_applytoform($mform, $record ? $record : null, $previousconfigstringkey);
 }
 
 function local_forumpostratelimit_coursemodule_edit_post_actions($moduleinfo, $course) {

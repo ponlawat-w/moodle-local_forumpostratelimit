@@ -25,6 +25,8 @@
 
 defined('MOODLE_INTERNAL') || die();
 
+$string['configuredlevelcourse'] = 'Post rate is limited in course level. Enabling these settings will override the current configuration.';
+$string['configuredlevelsite'] = 'Post rate is globally limited in site level. Enabling these settings will override the current configuration.';
 $string['days'] = 'Days';
 $string['enabled'] = 'Enabled';
 $string['hours'] = 'Hours';

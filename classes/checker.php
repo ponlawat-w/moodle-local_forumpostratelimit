@@ -107,6 +107,12 @@ class checker {
         return $record;
     }
 
+    public static function hassiteconfig() {
+        return get_config('local_forumpostratelimit', 'limit')
+            && get_config('local_forumpostratelimit', 'timespan')
+            && get_config('local_forumpostratelimit', 'timespanunit');
+    }
+
     public static function fromforumid($forumid) {
         $coursemodule = get_coursemodule_from_instance('forum', $forumid, 0, false, MUST_EXIST);
         return new self($coursemodule->id);
