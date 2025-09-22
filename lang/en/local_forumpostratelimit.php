@@ -26,6 +26,7 @@
 defined('MOODLE_INTERNAL') || die();
 
 $string['days'] = 'Days';
+$string['enabled'] = 'Enabled';
 $string['hours'] = 'Hours';
 $string['limitexceeded'] = 'You have exceeded post limit of {$a->limit} post(s) within {$a->timespan} {$a->timespanunit}(s).';
 $string['minutes'] = 'Minutes';

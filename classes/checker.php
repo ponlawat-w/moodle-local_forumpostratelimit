@@ -47,7 +47,7 @@ class checker {
                 $courseid = $context->instanceid;
                 $count = $DB->count_records_sql(
                     'SELECT COUNT(*) FROM {forum_posts} p JOIN {forum_discussions} d ON d.id = p.discussion WHERE d.course = ? AND p.userid = ? AND p.created >= ? AND p.id != ?',
-                    [$courseid, $userid, $this->getmintimestamp()]
+                    [$courseid, $userid, $this->getmintimestamp(), $excludepostid]
                 );
             }
         } else {

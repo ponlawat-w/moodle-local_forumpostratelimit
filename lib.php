@@ -39,6 +39,9 @@ function local_forumpostratelimit_getunitoptions() {
 function local_forumpostratelimit_applytoform(\MoodleQuickForm $mform, ?\stdClass $default = null) {
     $mform->addElement('header', 'local_forumpostratelimit', get_string('postratelimit', 'local_forumpostratelimit'));
 
+    $mform->addElement('checkbox', 'local_forumpostratelimit_enabled', get_string('enabled', 'local_forumpostratelimit'));
+    $mform->setDefault('local_forumpostratelimit_enabled', !is_null($default));
+
     $mform->addElement(
         'text',
         'local_forumpostratelimit_postratelimit',
@@ -46,6 +49,7 @@ function local_forumpostratelimit_applytoform(\MoodleQuickForm $mform, ?\stdClas
     );
     $mform->setType('local_forumpostratelimit_postratelimit', PARAM_INT);
     $mform->setDefault('local_forumpostratelimit_postratelimit', is_null($default) ? null : $default->postratelimit);
+    $mform->disabledIf('local_forumpostratelimit_postratelimit', 'local_forumpostratelimit_enabled');
     $mform->addHelpButton(
         'local_forumpostratelimit_postratelimit',
         'postratelimit',
@@ -59,6 +63,7 @@ function local_forumpostratelimit_applytoform(\MoodleQuickForm $mform, ?\stdClas
     );
     $mform->setType('local_forumpostratelimit_timespan', PARAM_FLOAT);
     $mform->setDefault('local_forumpostratelimit_timespan', is_null($default) ? null : $default->timespan);
+    $mform->disabledIf('local_forumpostratelimit_timespan', 'local_forumpostratelimit_enabled');
     $mform->addHelpButton(
         'local_forumpostratelimit_timespan',
         'timespan',
@@ -73,6 +78,7 @@ function local_forumpostratelimit_applytoform(\MoodleQuickForm $mform, ?\stdClas
     );
     $mform->setType('local_forumpostratelimit_timespanunit', PARAM_INT);
     $mform->setDefault('local_forumpostratelimit_timespanunit', is_null($default) ? null : $default->timespanunit);
+    $mform->disabledIf('local_forumpostratelimit_timespanunit', 'local_forumpostratelimit_enabled');
     $mform->addHelpButton(
         'local_forumpostratelimit_timespanunit',
         'timespanunit',

@@ -8,6 +8,9 @@ class formdata {
     private ?int $timespanunit = null;
 
     public function __construct(\stdClass $data) {
+        if (!isset($data->local_forumpostratelimit_enabled) || !$data->local_forumpostratelimit_enabled) {
+            return;
+        }
         $this->postratelimit = isset($data->local_forumpostratelimit_postratelimit) ?
             $data->local_forumpostratelimit_postratelimit : null;
         $this->timespan = isset($data->local_forumpostratelimit_timespan) ?
