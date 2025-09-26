@@ -28,4 +28,4 @@ $plugin->component = 'local_forumpostratelimit';
 $plugin->release = '1.0.0';
 $plugin->version = 2025092600;
 $plugin->requires = 2025041400;
-$plugin->maturity = MATURITY_ALPHA;
+$plugin->maturity = MATURITY_STABLE;
