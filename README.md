@@ -1,8 +1,11 @@
 # Forum Post Rate Limit #
 
-TODO Describe the plugin shortly here.
+Limit the ability to create posts / reply in a forum module.
 
-TODO Provide more detailed description here.
+The rate limit can be configured in site level (in forum plugin settings in Site Administration),
+course level (in course settings page),
+or module level (in forum settings page).
+The configuration in lower level will override the upper level if specified.
 
 ## Installing via uploaded ZIP file ##
 

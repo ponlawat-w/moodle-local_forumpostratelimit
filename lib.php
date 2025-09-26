@@ -22,21 +22,41 @@
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+/** @var LOCAL_FORUMPOSTRATELIMIT_SECONDS Time span unit second */
 const LOCAL_FORUMPOSTRATELIMIT_SECONDS = 1;
+/** @var LOCAL_FORUMPOSTRATELIMIT_MINUTES Time span unit minute  */
 const LOCAL_FORUMPOSTRATELIMIT_MINUTES = 2;
+/** @var LOCAL_FORUMPOSTRATELIMIT_HOURS Time span unit hour */
 const LOCAL_FORUMPOSTRATELIMIT_HOURS = 3;
+/** @var LOCAL_FORUMPOSTRATELIMIT_DAYS Time span unit day */
 const LOCAL_FORUMPOSTRATELIMIT_DAYS = 4;
 
+/**
+ * Get timespan unit options for form.
+ * @return array with key being timespan unit enum value and the value being the display label.
+ */
 function local_forumpostratelimit_getunitoptions() {
     return [
         LOCAL_FORUMPOSTRATELIMIT_SECONDS => get_string('seconds', 'local_forumpostratelimit'),
         LOCAL_FORUMPOSTRATELIMIT_MINUTES => get_string('minutes', 'local_forumpostratelimit'),
         LOCAL_FORUMPOSTRATELIMIT_HOURS => get_string('hours', 'local_forumpostratelimit'),
-        LOCAL_FORUMPOSTRATELIMIT_DAYS => get_string('days', 'local_forumpostratelimit')
+        LOCAL_FORUMPOSTRATELIMIT_DAYS => get_string('days', 'local_forumpostratelimit'),
     ];
 }
 
-function local_forumpostratelimit_applytoform(\MoodleQuickForm $mform, ?\stdClass $default = null, ?string $previousconfigstringkey = null) {
+/**
+ * Add configuration fields to form.
+ * @param \MoodleQuickForm $mform Form to be added.
+ * @param \stdClass|null $default Default values.
+ * @param string|null $previousconfigstringkey To display an alert message using this value as string key,
+ * if there are any configuration values definded in the upper level.
+ * @return void
+ */
+function local_forumpostratelimit_applytoform(
+    \MoodleQuickForm $mform,
+    ?\stdClass $default = null,
+    ?string $previousconfigstringkey = null
+) {
     $mform->addElement('header', 'local_forumpostratelimit', get_string('postratelimit', 'local_forumpostratelimit'));
 
     if (!is_null($previousconfigstringkey)) {
@@ -97,7 +117,12 @@ function local_forumpostratelimit_applytoform(\MoodleQuickForm $mform, ?\stdClas
     );
 }
 
-function local_forumpostratelimit_coursemodule_standard_elements(moodleform_mod $form, MoodleQuickForm $mform) {
+/**
+ * Inject forum module settings by adding post rate limit configuration fields.
+ * @param \moodleform_mod $form
+ * @param \MoodleQuickForm $mform
+ */
+function local_forumpostratelimit_coursemodule_standard_elements(\moodleform_mod $form, \MoodleQuickForm $mform) {
     global $DB;
     /** @var moodle_database $DB */
     $DB;
@@ -125,6 +150,12 @@ function local_forumpostratelimit_coursemodule_standard_elements(moodleform_mod 
     local_forumpostratelimit_applytoform($mform, $record ? $record : null, $previousconfigstringkey);
 }
 
+/**
+ * Apply configuration values when a forum module settings form is submitted.
+ * @param \stdClass $moduleinfo
+ * @param \stdClass $course
+ * @return \stdClass Module info
+ */
 function local_forumpostratelimit_coursemodule_edit_post_actions($moduleinfo, $course) {
     if ($moduleinfo->modulename != 'forum') {
         return $moduleinfo;
