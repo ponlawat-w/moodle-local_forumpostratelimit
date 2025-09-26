@@ -62,7 +62,9 @@ export const disableforumdiscuss = message => {
     };
     document.addEventListener('click', e => {
         /** @type {{ target: HTMLAnchorElement }} */
-        const { target } = e;
+        const {
+            target
+        } = e;
         if (target.attributes.getNamedItem('data-action')?.value === 'collapsible-link') {
             setInterval(disableforms, 500);
         }
