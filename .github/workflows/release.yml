@@ -43,4 +43,4 @@ jobs:
         with:
           tag_name: ${{ needs.get-version.outputs.plugin-release }}
           name: ${{ needs.get-version.outputs.plugin-release }}
-          body_path: ./CHANGES.md
+          body: ${{ needs.get-version.outputs.plugin-release }} - ${{ needs.get-version.outputs.plugin-version }}
