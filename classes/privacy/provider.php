@@ -15,17 +15,26 @@
 // along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
 
 /**
- * Plugin version and other meta-data are defined here.
+ * Privacy provider.
  *
  * @package     local_forumpostratelimit
  * @copyright   2025 Ponlawat WEERAPANPISIT <ponlawat_w@outlook.co.th>
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-defined('MOODLE_INTERNAL') || die();
+namespace local_forumpostratelimit\privacy;
 
-$plugin->component = 'local_forumpostratelimit';
-$plugin->release = '1.0.1';
-$plugin->version = 2025101300;
-$plugin->requires = 2025041400;
-$plugin->maturity = MATURITY_STABLE;
+/**
+ * Privacy provider
+ */
+class provider implements \core_privacy\local\metadata\null_provider {
+    /**
+     * Get the language string identifier with the component's language
+     * file to explain why this plugin stores no data.
+     *
+     * @return string
+     */
+    public static function get_reason(): string {
+        return 'privacy:metadata';
+    }
+}
