@@ -25,7 +25,7 @@
 defined('MOODLE_INTERNAL') || die();
 
 $plugin->component = 'local_forumpostratelimit';
-$plugin->release = '1.0.0';
-$plugin->version = 2025092600;
+$plugin->release = '1.0.1';
+$plugin->version = 2025101300;
 $plugin->requires = 2025041400;
 $plugin->maturity = MATURITY_STABLE;
