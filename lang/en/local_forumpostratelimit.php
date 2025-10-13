@@ -35,6 +35,7 @@ $string['minutes'] = 'Minutes';
 $string['pluginname'] = 'Forum Post Rate Limit';
 $string['postratelimit'] = 'Post Rate Limit';
 $string['postratelimit_help'] = 'Maximum number of posts a user can make within the specified timespan.';
+$string['privacy:metadata'] = 'This plugin does not store privacy data.';
 $string['seconds'] = 'Seconds';
 $string['timespan'] = 'Time Span';
 $string['timespan_help'] = 'Duration of time to apply the post rate limit.';
