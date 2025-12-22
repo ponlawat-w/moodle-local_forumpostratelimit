@@ -139,7 +139,7 @@ function local_forumpostratelimit_coursemodule_standard_elements(\moodleform_mod
     if ($coursemodule) {
         [$course] = get_course_and_cm_from_cmid($coursemodule);
         $context = core\context\module::instance($coursemodule->id);
-        $record = $DB->get_record('local_forumpostratelimit_configs', ['context' => $context->instanceid]);
+        $record = $DB->get_record('local_forumpostratelimit_configs', ['context' => $context->id]);
         if ($DB->get_record('local_forumpostratelimit_configs', ['context' => core\context\course::instance($course->id)->id])) {
             $previousconfigstringkey = 'configuredlevelcourse';
         }
@@ -161,6 +161,7 @@ function local_forumpostratelimit_coursemodule_edit_post_actions($moduleinfo, $c
         return $moduleinfo;
     }
     $data = new stdClass();
+    $data->local_forumpostratelimit_enabled = optional_param('local_forumpostratelimit_enabled', false, PARAM_BOOL);
     $data->local_forumpostratelimit_postratelimit = optional_param('local_forumpostratelimit_postratelimit', null, PARAM_INT);
     $data->local_forumpostratelimit_timespan = optional_param('local_forumpostratelimit_timespan', null, PARAM_FLOAT);
     $data->local_forumpostratelimit_timespanunit = optional_param('local_forumpostratelimit_timespanunit', null, PARAM_INT);
